@@ -1,11 +1,15 @@
+import numpy as np
+
 from gauss import *
 from gauss_better import Gauss
 from Data import Data
 from Ele4 import Eleme4
 from Jakobian import Jakobian
 from MatrixH import MatrixH
-from Agregate import agregate2D
-
+from Agregate import *
+from MatrixHBC import MatrixHBC
+from Element4HBC import Element4HBC
+from MatrixP import MatrixP
 
 class Node:
     def __init__(self, ID, x, y):
@@ -29,6 +33,8 @@ class Element:
         self.ID = ID
         self.nodes_ID = nodes_ID[1:5]
         self.H = None
+        self.Hbc = None
+        self.P = None
 
     def __str__(self):
         return f'ID = {self.ID} nodes ID = {self.nodes_ID}'
@@ -82,26 +88,50 @@ class GlobalData:
 
 def main():
     grid = Grid()
-    grid.show()
     npc = 2
 
     element4 = Eleme4(npc)
     element4_data = element4.calculate()
+    element4HBC = Element4HBC
 
-    for element in grid.elements:
+###
+
+###
+    for it, element in enumerate(grid.elements):
+        print(f"ELEMENT {it}")
         jakob = Jakobian(element4_data, element.nodes_ID, grid.nodes, npc)
 
         element.H = MatrixH(jakob.inv_jakob, element4_data, jakob.jakobs, npc).H
         #print(element.H)
 
-    H_aggregated = agregate2D(grid)
+        matrixHBC = MatrixHBC(element, grid.nodes, npc)
+        matrixHBC.calculate()
+        element.Hbc = matrixHBC.HBC
 
-    for element in grid.elements:
-        print(element.H)
+    H_aggregated = agregate2D(grid)
+    HBC_aggregated = agregateHBC(grid)
+
+    #for element in grid.elements:
+    #    print(element.H)
     #print(grid.elements[0].H)
-    for x in H_aggregated:
+   # for x in H_aggregated:
+    #    print(x)
+
+    """for element in grid.elements:
+        print(element.Hbc)
+
+    print("HBC AGGREGATED")
+    for x in HBC_aggregated:
         print(x)
 
-
+    """
+    print("\nH + HBC AGGREGATED")
+    sum = HBC_aggregated + H_aggregated
+    for x in sum:
+        print(x)
 
 main()
+#element4HBC = Element4HBC(2)
+#HBC_data = element4HBC.calculate()
+
+
