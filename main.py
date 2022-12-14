@@ -11,6 +11,7 @@ from MatrixHBC import MatrixHBC
 from Element4HBC import Element4HBC
 from MatrixP import MatrixP
 
+
 class Node:
     def __init__(self, ID, x, y):
         self.ID = ID
@@ -88,50 +89,68 @@ class GlobalData:
 
 def main():
     grid = Grid()
+    global_data = GlobalData(grid.data.global_data_values)
+
     npc = 2
-
     element4 = Eleme4(npc)
+    #element4.calculate()
     element4_data = element4.calculate()
-    element4HBC = Element4HBC
 
-###
+    element4HBC = Element4HBC(npc, 300)
+    element4HBC.calculate()
 
-###
+
+
     for it, element in enumerate(grid.elements):
-        print(f"ELEMENT {it}")
+        print(f"ELEMENT {it }")
         jakob = Jakobian(element4_data, element.nodes_ID, grid.nodes, npc)
 
-        element.H = MatrixH(jakob.inv_jakob, element4_data, jakob.jakobs, npc).H
-        #print(element.H)
+        matrixH = MatrixH(jakob.inv_jakob, element4_data, jakob.jakobs, npc)
+        element.H = matrixH.H
 
-        matrixHBC = MatrixHBC(element, grid.nodes, npc)
-        matrixHBC.calculate()
+
+        matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, npc)
         element.Hbc = matrixHBC.HBC
 
-    H_aggregated = agregate2D(grid)
-    HBC_aggregated = agregateHBC(grid)
+        matrixP = MatrixP(element, grid.nodes, element4HBC, 300, 1200, 2)
+       # print(matrixP.P)
+        element.P = matrixP.P
 
-    #for element in grid.elements:
-    #    print(element.H)
-    #print(grid.elements[0].H)
-   # for x in H_aggregated:
-    #    print(x)
+        element.H += element.Hbc
 
-    """for element in grid.elements:
-        print(element.Hbc)
 
-    print("HBC AGGREGATED")
-    for x in HBC_aggregated:
-        print(x)
 
-    """
-    print("\nH + HBC AGGREGATED")
-    sum = HBC_aggregated + H_aggregated
-    for x in sum:
-        print(x)
+        #print(element.H)
+
+
+    H_aggregated = agregateH(grid)
+    P_aggregated = agregateP(grid)
+
+    print("H aggregated:")
+    for x in H_aggregated:
+       print(x)
+    print("P aggregated:")
+    for x in P_aggregated:
+       print(x)
+    print("//////////////")
+    print(P_aggregated)
+    print("//////////////")
+
+    negative_P_aggregated = np.negative(P_aggregated)
+    # Ax = B
+    A = H_aggregated
+    B = negative_P_aggregated
+    print(np.linalg.solve(A, B))
+
+
 
 main()
-#element4HBC = Element4HBC(2)
-#HBC_data = element4HBC.calculate()
+
+
+# grid = Grid()
+# element4HBC = Element4HBC(2, 300)
+# element4HBC.calculate()
+# matrixP = MatrixP(grid.elements[0], grid.nodes, element4HBC, 25, 1200, 2)
+
 
 
