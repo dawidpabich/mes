@@ -1,7 +1,5 @@
 import numpy as np
 
-from gauss import *
-from gauss_better import Gauss
 from Data import Data
 from Ele4 import Eleme4
 from Jakobian import Jakobian
