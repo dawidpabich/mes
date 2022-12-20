@@ -1,13 +1,15 @@
 import numpy as np
 
 from Data import Data
-from Ele4 import Eleme4
+from Element4 import Element4
 from Jakobian import Jakobian
 from MatrixH import MatrixH
 from Agregate import *
 from MatrixHBC import MatrixHBC
 from Element4HBC import Element4HBC
 from MatrixP import MatrixP
+from MatrixC import MatrixC
+from SolveTemp import solveTemp
 
 
 class Node:
@@ -33,15 +35,17 @@ class Element:
         self.nodes_ID = nodes_ID[1:5]
         self.H = None
         self.Hbc = None
+        self.H_Final = None
         self.P = None
+        self.C = None
 
     def __str__(self):
         return f'ID = {self.ID} nodes ID = {self.nodes_ID}'
 
 
 class Grid:
-    def __init__(self):
-        self.data = Data("Test1_4_4.txt")
+    def __init__(self, filename):
+        self.data = Data(filename)
         self.nodes = []
         self.elements = []
         for it, node in enumerate(self.data.nodes_data):
@@ -86,69 +90,79 @@ class GlobalData:
 
 
 def main():
-    grid = Grid()
+    np.set_printoptions(linewidth=300)
+    grid = Grid("Test1_4_4.txt")
     global_data = GlobalData(grid.data.global_data_values)
 
     npc = 2
-    element4 = Eleme4(npc)
-    #element4.calculate()
+    element4 = Element4(npc)
+    # element4.calculate()
     element4_data = element4.calculate()
 
     element4HBC = Element4HBC(npc, 300)
     element4HBC.calculate()
 
-
-
     for it, element in enumerate(grid.elements):
-        print(f"ELEMENT {it }")
+        print(f"ELEMENT {it}")
         jakob = Jakobian(element4_data, element.nodes_ID, grid.nodes, npc)
 
-        matrixH = MatrixH(jakob.inv_jakob, element4_data, jakob.jakobs, npc)
-        element.H = matrixH.H
 
+        matrixH = MatrixH(jakob.inv_jakob, element4_data, global_data.Conductivity, jakob.jakobs, npc)
+        element.H = matrixH.H
+        #print(element.H)
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, npc)
         element.Hbc = matrixHBC.HBC
 
         matrixP = MatrixP(element, grid.nodes, element4HBC, 300, 1200, 2)
-       # print(matrixP.P)
         element.P = matrixP.P
 
+
+
         element.H += element.Hbc
+        #element.H_Final = element.H + element.Hbc
 
-
-
-        #print(element.H)
-
+        matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
+        element.C = matrixC.C
+       # print(element.C)
 
     H_aggregated = agregateH(grid)
     P_aggregated = agregateP(grid)
+    C_aggregated = agregateC(grid)
 
-    print("H aggregated:")
+
+    print("H_Final aggregated:")
     for x in H_aggregated:
-       print(x)
+        print(x)
     print("P aggregated:")
     for x in P_aggregated:
-       print(x)
+        print(x)
     print("//////////////")
-    print(P_aggregated)
-    print("//////////////")
+
+    print("C aggregated")
+    for x in C_aggregated:
+        print(x, end='\n')
 
     negative_P_aggregated = np.negative(P_aggregated)
     # Ax = B
     A = H_aggregated
     B = negative_P_aggregated
-    print(np.linalg.solve(A, B))
+    #print(np.linalg.solve(A, B))
+    P_aggregated = np.full((16, 1), 12000)
+    P_aggregated[5] = 0
+    P_aggregated[6] = 0
+    P_aggregated[9] = 0
+    P_aggregated[10] = 0
+
+
+    print()
+    solveTemp(H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp, global_data.SimulationTime, global_data.SimulationStepTime)
 
 
 
 main()
 
-
 # grid = Grid()
 # element4HBC = Element4HBC(2, 300)
 # element4HBC.calculate()
 # matrixP = MatrixP(grid.elements[0], grid.nodes, element4HBC, 25, 1200, 2)
-
-
-

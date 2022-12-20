@@ -1,4 +1,3 @@
-
 class Data():
     def __init__(self, filename):
         self.filename = filename
@@ -25,4 +24,3 @@ class Data():
             self.nodes_data.append(list(map(float, nodes_data_string[i])))
         for i in range(int(elements_number)):
             self.elements_data.append(list(map(int, elements_data_string[i])))
-

@@ -1,18 +1,17 @@
-
 import numpy as np
 
 
 class MatrixH():
-    def __init__(self, inverted_jakob, ele4_data, detJ, npc):
+    def __init__(self, inverted_jakob, ele4_data, k, detJ, npc):
 
         self.inverted_jakob = inverted_jakob
         self.ele4_data = ele4_data
-        self.k = 25
+        self.k = k
         self.detJ = detJ
         self.dNdx = []
         self.dNdy = []
         self.Hpc = []
-        self.H = np.zeros((4,4))
+        self.H = np.zeros((4, 4))
 
         self.calculate(npc)
 
@@ -23,7 +22,7 @@ class MatrixH():
         for i in range(npc ** 2):
             self.dNdx.append([])
             self.dNdy.append([])
-            self.Hpc.append([ [], [], [], [] ])
+            self.Hpc.append([[], [], [], []])
 
         for i in range(npc ** 2):
             for j in range(4):
@@ -33,16 +32,12 @@ class MatrixH():
                 self.dNdy[i].append(
                     self.inverted_jakob[i][0][1] * ksi_data[i][j] + self.inverted_jakob[i][1][1] * eta_data[i][j])
 
-
-
         for i in range(npc ** 2):
             for j in range(4):
                 for k in range(4):
                     tempX = self.dNdx[i][j] * self.dNdx[i][k]
                     tempY = self.dNdy[i][j] * self.dNdy[i][k]
-                    self.Hpc[i][j].append(self.k * (tempX + tempY) * self.detJ[j] )
-
-
+                    self.Hpc[i][j].append(self.k * (tempX + tempY) * self.detJ[j])
 
         # sumowanie macierzy H
         if npc == 2:
@@ -53,19 +48,18 @@ class MatrixH():
                     wPC.append(w[0][i] * w[1][j])
 
         elif npc == 3:
-            w = [[ 5/9, 8/9, 5/9], [ 5/9, 8/9, 5/9]]
+            w = [[5 / 9, 8 / 9, 5 / 9], [5 / 9, 8 / 9, 5 / 9]]
             wPC = []
-            for i in range (npc):
+            for i in range(npc):
                 for j in range(npc):
                     wPC.append(w[0][i] * w[1][j])
 
         elif npc == 4:
             w = [[0.347855, 0.652145, 0.652145, 0.347855], [0.347855, 0.652145, 0.652145, 0.347855]]
             wPC = []
-            for i in range (npc):
+            for i in range(npc):
                 for j in range(npc):
                     wPC.append(w[0][i] * w[1][j])
-
 
         for i in range(len(self.Hpc)):
             self.Hpc[i] = np.array(self.Hpc[i])
@@ -73,7 +67,7 @@ class MatrixH():
 
         for i in range(len(self.Hpc)):
             self.H = self.H + self.Hpc[i]
-        #self.H = self.H.tolist()
+        # self.H = self.H.tolist()
 
         """for HpcIndex in range(len(self.Hpc)):
             print("Hpc" + str(HpcIndex + 1))
@@ -83,11 +77,7 @@ class MatrixH():
                 print()
             print()"""
 
-        #self.draw()
-
-
-
-
+        # self.draw()
 
     def draw(self):
         print("dNdX: ")
@@ -112,9 +102,3 @@ class MatrixH():
 
         print("H: ")
         print(self.H)
-
-
-
-
-
-

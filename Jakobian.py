@@ -10,27 +10,29 @@ class Jakobian():
         self.x = []
         self.y = []
 
-        for i in range (4):
+        for i in range(4):
             self.x.append(self.nodes[self.nodes_ID[i] - 1].x)
             self.y.append(self.nodes[self.nodes_ID[i] - 1].y)
 
         self.calculate(npc)
 
-
-
     def calculate(self, npc):
-        jakob = [[0,0],[0,0]]
-        inv_jakob = [[0,0],[0,0]]
+        jakob = [[0, 0], [0, 0]]
+        inv_jakob = [[0, 0], [0, 0]]
         detJ = 0
         for j in range(npc ** 2):
             # dx po dksi
-            jakob[0][0] = self.ksi_data[j][0] * self.x[0] + self.ksi_data[j][1] * self.x[1] + self.ksi_data[j][2] * self.x[2] + self.ksi_data[j][3] * self.x[3]
+            jakob[0][0] = self.ksi_data[j][0] * self.x[0] + self.ksi_data[j][1] * self.x[1] + self.ksi_data[j][2] * \
+                          self.x[2] + self.ksi_data[j][3] * self.x[3]
             # dy po dksi
-            jakob[0][1] = self.ksi_data[j][0] * self.y[0] + self.ksi_data[j][1] * self.y[1] + self.ksi_data[j][2] * self.y[2] + self.ksi_data[j][3] * self.y[3]
+            jakob[0][1] = self.ksi_data[j][0] * self.y[0] + self.ksi_data[j][1] * self.y[1] + self.ksi_data[j][2] * \
+                          self.y[2] + self.ksi_data[j][3] * self.y[3]
             # dx po deta
-            jakob[1][0] = self.eta_data[j][0] * self.x[0] + self.eta_data[j][1] * self.x[1] + self.eta_data[j][2] * self.x[2] + self.eta_data[j][3] * self.x[3]
+            jakob[1][0] = self.eta_data[j][0] * self.x[0] + self.eta_data[j][1] * self.x[1] + self.eta_data[j][2] * \
+                          self.x[2] + self.eta_data[j][3] * self.x[3]
             # dy po deta
-            jakob[1][1] = self.eta_data[j][0] * self.y[0] + self.eta_data[j][1] * self.y[1] + self.eta_data[j][2] * self.y[2] + self.eta_data[j][3] * self.y[3]
+            jakob[1][1] = self.eta_data[j][0] * self.y[0] + self.eta_data[j][1] * self.y[1] + self.eta_data[j][2] * \
+                          self.y[2] + self.eta_data[j][3] * self.y[3]
 
             detJ = jakob[0][0] * jakob[1][1] - jakob[1][0] * jakob[0][1]
             self.jakobs.append(detJ)
@@ -44,7 +46,7 @@ class Jakobian():
             # dy po deta
             inv_jakob[1][1] = 1 / detJ * jakob[1][1]
             self.inv_jakob.append(inv_jakob)
-        return self.inv_jakob
+
 
     def draw(self):
         print("Jakobian: ")

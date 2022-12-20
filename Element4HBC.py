@@ -27,8 +27,7 @@ class Element4HBC():
 
     def calculate(self):
         arg = 1 / sqrt(3)
-        ksi_args = [[-arg, arg], [-arg, arg], [-1, -1], [-1, -1]]
-        eta_args = [[-arg, arg], [1, 1], [-arg, arg], [-1, -1]]
+
 
         if self.npc == 2:
             wagi = [1, 1]
