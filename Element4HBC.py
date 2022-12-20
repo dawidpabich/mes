@@ -28,7 +28,6 @@ class Element4HBC():
     def calculate(self):
         arg = 1 / sqrt(3)
 
-
         if self.npc == 2:
             wagi = [1, 1]
             arg = 0.5773
@@ -157,7 +156,3 @@ class Element4HBC():
             for x in list:
                 print(x, end=" ")
             print()
-
-
-
-

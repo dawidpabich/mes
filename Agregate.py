@@ -19,6 +19,7 @@ def agregateP(grid):
             P_aggregated_matrix[element.nodes_ID[i] - 1] += element.P[i]
     return P_aggregated_matrix
 
+
 def agregateC(grid):
     size = len(grid.nodes)
     C_aggregated_matrix = np.zeros((size, size))

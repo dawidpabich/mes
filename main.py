@@ -106,10 +106,9 @@ def main():
         print(f"ELEMENT {it}")
         jakob = Jakobian(element4_data, element.nodes_ID, grid.nodes, npc)
 
-
         matrixH = MatrixH(jakob.inv_jakob, element4_data, global_data.Conductivity, jakob.jakobs, npc)
         element.H = matrixH.H
-        #print(element.H)
+        # print(element.H)
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, npc)
         element.Hbc = matrixHBC.HBC
@@ -117,19 +116,16 @@ def main():
         matrixP = MatrixP(element, grid.nodes, element4HBC, 300, 1200, 2)
         element.P = matrixP.P
 
-
-
         element.H += element.Hbc
-        #element.H_Final = element.H + element.Hbc
+        # element.H_Final = element.H + element.Hbc
 
         matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
         element.C = matrixC.C
-       # print(element.C)
+    # print(element.C)
 
     H_aggregated = agregateH(grid)
     P_aggregated = agregateP(grid)
     C_aggregated = agregateC(grid)
-
 
     print("H_Final aggregated:")
     for x in H_aggregated:
@@ -147,17 +143,11 @@ def main():
     # Ax = B
     A = H_aggregated
     B = negative_P_aggregated
-    #print(np.linalg.solve(A, B))
-    P_aggregated = np.full((16, 1), 12000)
-    P_aggregated[5] = 0
-    P_aggregated[6] = 0
-    P_aggregated[9] = 0
-    P_aggregated[10] = 0
-
+    # print(np.linalg.solve(A, B))
 
     print()
-    solveTemp(H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp, global_data.SimulationTime, global_data.SimulationStepTime)
-
+    solveTemp(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,
+              global_data.SimulationTime, global_data.SimulationStepTime)
 
 
 main()

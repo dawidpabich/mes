@@ -47,7 +47,6 @@ class Jakobian():
             inv_jakob[1][1] = 1 / detJ * jakob[1][1]
             self.inv_jakob.append(inv_jakob)
 
-
     def draw(self):
         print("Jakobian: ")
         for list in self.inv_jakob:
