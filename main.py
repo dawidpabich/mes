@@ -9,7 +9,7 @@ from MatrixHBC import MatrixHBC
 from Element4HBC import Element4HBC
 from VectorP import MatrixP
 from MatrixC import MatrixC
-from SolveTemp import solveTemp
+from Simulation import simulation
 
 
 class Node:
@@ -91,7 +91,7 @@ class GlobalData:
 
 def main():
     np.set_printoptions(linewidth=300)
-    grid = Grid("Test1_4_4.txt")
+    grid = Grid("Test2_4_4_MixGrid.txt")
     global_data = GlobalData(grid.data.global_data_values)
 
     npc = 2
@@ -123,7 +123,7 @@ def main():
 
         matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
         element.C = matrixC.C
-    # print(element.C)
+        print(element.C)
 
     H_aggregated = agregateH(grid)
     P_aggregated = agregateP(grid)
@@ -142,8 +142,8 @@ def main():
         print(x, end='\n')
 
     print()
-    solveTemp(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,
-              global_data.SimulationTime, global_data.SimulationStepTime)
+    simulation(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,
+               global_data.SimulationTime, global_data.SimulationStepTime)
 
 
 main()

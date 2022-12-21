@@ -31,22 +31,15 @@ class MatrixHBC:
 
                 if i == -1:  # prawa sciana
                     HBCpc += self.element4MatrixHBC.prawa_sciana_N_Razy_NTransponowane
-                    print(f"detJ = {detJ}")
 
                 if i == 0:  # gorna sciana
                     HBCpc += self.element4MatrixHBC.gorna_sciana_N_Razy_NTransponowane
-                    print(HBCpc*detJ)
-                    print(f"detJ = {detJ}")
 
                 if i == 1:  # lewa sciana
                     HBCpc += self.element4MatrixHBC.lewa_sciana_N_Razy_NTransponowane
-                    print(HBCpc*detJ)
-                    print(f"detJ = {detJ}")
-
 
                 if i == 2:  # dolna sciana
                     HBCpc += self.element4MatrixHBC.dolna_sciana_N_Razy_NTransponowane
-                    print(f"detJ = {detJ}")
 
         self.HBC += HBCpc * detJ  # czy tutaj detJ???
         # print(self.HBC)

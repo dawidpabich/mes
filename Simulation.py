@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def solveTemp(nodes_number, H_agr, P_agr, C_agr, initial_temp, simulation_time, simulation_step_time):
+def simulation(nodes_number, H_agr, P_agr, C_agr, initial_temp, simulation_time, simulation_step_time):
     time = 0
     t0 = np.full((nodes_number, 1), initial_temp)
 
