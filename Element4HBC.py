@@ -30,15 +30,15 @@ class Element4HBC():
 
         if self.npc == 2:
             wagi = [1, 1]
-            arg = 0.5773
+            arg = 1 / sqrt(3)
             # PC1 = [ (arg, -1), (-arg, -1)] # dolna
             # PC2 = [(1, arg), (1, -arg)] # prawa
             # PC3 = [(arg, 1), (-arg, 1)] # gorna
             # PC4 = [(-1, arg), (-1, -arg)] # lewa
             PC1 = [(-arg, -1), (arg, -1)]  # dolna
             PC2 = [(1, -arg), (1, arg)]  #
-            PC3 = [(-arg, 1), (arg, 1)]
-            PC4 = [(-1, -arg), (-1, arg)]
+            PC3 = [(arg, 1), (-arg, 1)]
+            PC4 = [(-1, arg), (-1, -arg)]
 
         # liczenie funkcji kształtu dla punktów całkowania
         for j in range(self.npc):
@@ -131,6 +131,7 @@ class Element4HBC():
             temp_N_razy_NTransponowane = np.multiply(temp_lewa_sciana, temp_lewa_scianaT)
             temp_N_razy_NTransponowane *= wagi[i] * self.alfa
             self.lewa_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
+
 
     def draw(self):
         print("Dolna sciana")

@@ -7,7 +7,7 @@ from MatrixH import MatrixH
 from Agregate import *
 from MatrixHBC import MatrixHBC
 from Element4HBC import Element4HBC
-from MatrixP import MatrixP
+from VectorP import MatrixP
 from MatrixC import MatrixC
 from SolveTemp import solveTemp
 
@@ -108,15 +108,17 @@ def main():
 
         matrixH = MatrixH(jakob.inv_jakob, element4_data, global_data.Conductivity, jakob.jakobs, npc)
         element.H = matrixH.H
-        # print(element.H)
+        print(element.H)
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, npc)
         element.Hbc = matrixHBC.HBC
 
         matrixP = MatrixP(element, grid.nodes, element4HBC, 300, 1200, 2)
         element.P = matrixP.P
+        #print(element.P)
 
         element.H += element.Hbc
+        print(element.H)
         # element.H_Final = element.H + element.Hbc
 
         matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
@@ -138,12 +140,6 @@ def main():
     print("C aggregated")
     for x in C_aggregated:
         print(x, end='\n')
-
-    negative_P_aggregated = np.negative(P_aggregated)
-    # Ax = B
-    A = H_aggregated
-    B = negative_P_aggregated
-    # print(np.linalg.solve(A, B))
 
     print()
     solveTemp(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,

@@ -18,14 +18,18 @@ class MatrixP:
     def calculate(self):
 
         detJ = 0
-        HPpc = np.zeros((4, 1))
+        HPCsc1 = np.zeros((4, 1))
+        HPCsc2 = np.zeros((4, 1))
+        HPCsc3 = np.zeros((4, 1))
+        HPCsc4 = np.zeros((4, 1))
 
         for i in range(-1, 3):  # sprawdzamy każdą ścianę
             if (self.nodes[self.nodesID[i] - 1]).BC == 1 and (self.nodes[self.nodesID[i + 1] - 1]).BC == 1:
-                x1 = abs((self.nodes[self.nodesID[i] - 1]).x)
-                x2 = abs((self.nodes[self.nodesID[i + 1] - 1]).x)
-                y1 = abs((self.nodes[self.nodesID[i] - 1]).y)
-                y2 = abs((self.nodes[self.nodesID[i + 1] - 1]).y)
+
+                x1 = self.nodes[self.nodesID[i] - 1].x
+                x2 = self.nodes[self.nodesID[i + 1] - 1].x
+                y1 = self.nodes[self.nodesID[i] - 1].y
+                y2 = self.nodes[self.nodesID[i + 1] - 1].y
 
                 # if(x1 - x2 != 0):
                 #     detJ = (x1 - x2) / 2
@@ -40,7 +44,7 @@ class MatrixP:
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
                         N *= self.tot
-                        HPpc += N
+                        HPCsc1 += N
 
                 if i == 0:  # gorna sciana
                     for j in range(self.npc):
@@ -48,7 +52,7 @@ class MatrixP:
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
                         N *= self.tot
-                        HPpc += N
+                        HPCsc2 += N
 
                 if i == 1:  # lewa sciana
                     for j in range(self.npc):
@@ -56,7 +60,7 @@ class MatrixP:
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
                         N *= self.tot
-                        HPpc += N
+                        HPCsc3 += N
 
                 if i == 2:  # dolna sciana
                     for j in range(self.npc):
@@ -64,9 +68,9 @@ class MatrixP:
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
                         N *= self.tot
-                        HPpc += N
-
-        self.P += HPpc * self.alfa * detJ  # det J gdzies indziej???
+                        HPCsc4 += N
+        self.P += HPCsc1 + HPCsc2 + HPCsc3 + HPCsc4
+        self.P *= self.alfa * detJ  # det J gdzies indziej???
 
     def draw(self):
         for x in self.HBC:
