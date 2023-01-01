@@ -3,7 +3,7 @@ from math import sqrt
 import numpy as np
 
 
-class MatrixP:
+class VectorP:
     def __init__(self, element, nodes, element4MatrixHBC, alfa, tot, npc):
         self.alfa = alfa
         self.tot = tot

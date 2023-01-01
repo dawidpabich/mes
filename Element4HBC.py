@@ -40,6 +40,26 @@ class Element4HBC():
             PC3 = [(arg, 1), (-arg, 1)]
             PC4 = [(-1, arg), (-1, -arg)]
 
+        if self.npc == 3:
+            wagi = [5 / 9, 8 / 9, 5 / 9]
+            arg = sqrt(3 / 5)
+
+            PC1 = [(-arg, -1), (0, -1), (arg, -1)]  # dolna
+            PC2 = [(1, -arg), (1, 0), (1, arg)]  # prawa
+            PC3 = [(arg, 1),  (0, 1), (-arg, 1)]  # gorna
+            PC4 = [(-1, arg), (-1, 0), (-1, -arg)]  # lewa
+
+        if self.npc == 4:
+            wagi = [0.347855, 0.652145, 0.652145, 0.347855]
+            arg = 0.861136
+            arg2 = 0.339981
+
+            PC1 = [(-arg, -1), (-arg2, -1), (arg2, -1), (arg, -1)]  # dolna
+            PC2 = [(1, -arg), (1, -arg2), (1, arg2), (1, arg)]  # prawa
+            PC3 = [(arg, 1), (arg2, 1), (-arg2, 1), (-arg, 1)]  # gorna
+            PC4 = [(-1, arg), (-1, arg2), (-1, -arg2), (-1, -arg)]  # lewa
+
+
         # liczenie funkcji kształtu dla punktów całkowania
         for j in range(self.npc):
             """
@@ -106,31 +126,32 @@ class Element4HBC():
             self.lewa_sciana[j].append(N4)
             # print(N1, N2)
 
-        # liczenie N * N transponowane dla każdej ściany
+        #  liczenie N * N transponowane dla każdej ściany
         for i in range(self.npc):
             temp_dolna_sciana = np.array(self.dolna_sciana[i])
             temp_dolna_scianaT = temp_dolna_sciana.reshape((-1, 1))  # -1 znaczy - tyle wierszy ile potrzeba
             temp_N_razy_NTransponowane = np.multiply(temp_dolna_sciana, temp_dolna_scianaT)
-            temp_N_razy_NTransponowane *= wagi[i] * self.alfa
+            temp_N_razy_NTransponowane *= wagi[i]
             self.dolna_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
 
             temp_prawa_sciana = np.array(self.prawa_sciana[i])
             temp_prawa_scianaT = temp_prawa_sciana.reshape((-1, 1))  # -1 znaczy - tyle wierszy ile potrzeba
             temp_N_razy_NTransponowane = np.multiply(temp_prawa_sciana, temp_prawa_scianaT)
-            temp_N_razy_NTransponowane *= wagi[i] * self.alfa
+            temp_N_razy_NTransponowane *= wagi[i]
             self.prawa_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
 
             temp_gorna_sciana = np.array(self.gorna_sciana[i])
             temp_gorna_scianaT = temp_gorna_sciana.reshape((-1, 1))  # -1 znaczy - tyle wierszy ile potrzeba
             temp_N_razy_NTransponowane = np.multiply(temp_gorna_sciana, temp_gorna_scianaT)
-            temp_N_razy_NTransponowane *= wagi[i] * self.alfa
+            temp_N_razy_NTransponowane *= wagi[i]
             self.gorna_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
 
             temp_lewa_sciana = np.array(self.lewa_sciana[i])
             temp_lewa_scianaT = temp_lewa_sciana.reshape((-1, 1))  # -1 znaczy - tyle wierszy ile potrzeba
             temp_N_razy_NTransponowane = np.multiply(temp_lewa_sciana, temp_lewa_scianaT)
-            temp_N_razy_NTransponowane *= wagi[i] * self.alfa
+            temp_N_razy_NTransponowane *= wagi[i]
             self.lewa_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
+
 
 
     def draw(self):

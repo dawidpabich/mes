@@ -4,12 +4,12 @@ import numpy as np
 
 
 class MatrixHBC:
-    def __init__(self, element, nodes, element4MatrixHBC, npc):
-        self.npc = npc
+    def __init__(self, element, nodes, element4MatrixHBC, alfa):
         self.nodesID = element.nodes_ID
         self.nodes = nodes
         self.HBC = np.zeros((4, 4))
         self.element4MatrixHBC = element4MatrixHBC
+        self.alfa = alfa
 
         self.calculate()
 
@@ -41,7 +41,7 @@ class MatrixHBC:
                 if i == 2:  # dolna sciana
                     HBCpc += self.element4MatrixHBC.dolna_sciana_N_Razy_NTransponowane
 
-        self.HBC += HBCpc * detJ  # czy tutaj detJ???
+        self.HBC += HBCpc * detJ * self.alfa  # czy tutaj detJ???
         # print(self.HBC)
         # print()
 

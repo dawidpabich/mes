@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class MatrixH():
+class MatrixH:
     def __init__(self, inverted_jakob, ele4_data, k, detJ, npc):
 
         self.inverted_jakob = inverted_jakob
@@ -16,30 +16,6 @@ class MatrixH():
         self.calculate(npc)
 
     def calculate(self, npc):
-        ksi_data = self.ele4_data[0]
-        eta_data = self.ele4_data[1]
-
-        for i in range(npc ** 2):
-            self.dNdx.append([])
-            self.dNdy.append([])
-            self.Hpc.append([[], [], [], []])
-
-        for i in range(npc ** 2):
-            for j in range(4):
-                self.dNdx[i].append(
-                    self.inverted_jakob[i][0][0] * ksi_data[i][j] + self.inverted_jakob[i][1][0] * eta_data[i][j])
-
-                self.dNdy[i].append(
-                    self.inverted_jakob[i][0][1] * ksi_data[i][j] + self.inverted_jakob[i][1][1] * eta_data[i][j])
-
-        for i in range(npc ** 2):
-            for j in range(4):
-                for k in range(4):
-                    tempX = self.dNdx[i][j] * self.dNdx[i][k]
-                    tempY = self.dNdy[i][j] * self.dNdy[i][k]
-                    self.Hpc[i][j].append(self.k * (tempX + tempY) * self.detJ[j])
-
-        # sumowanie macierzy H
         if npc == 2:
             w = [[1, 1], [1, 1]]
             wPC = []
@@ -61,25 +37,42 @@ class MatrixH():
                 for j in range(npc):
                     wPC.append(w[0][i] * w[1][j])
 
-        for i in range(len(self.Hpc)):
-            self.Hpc[i] = np.array(self.Hpc[i])
-            self.Hpc[i] = self.Hpc[i] * wPC[i]
 
-        for i in range(len(self.Hpc)):
-            self.H = self.H + self.Hpc[i]
-        # self.H = self.H.tolist()
+        ksi_data = self.ele4_data[0]
+        eta_data = self.ele4_data[1]
+        print(self.detJ)
+        print(len(wPC), wPC)
+        for i in range(npc ** 2):
+            self.dNdx.append([])
+            self.dNdy.append([])
 
-        """for HpcIndex in range(len(self.Hpc)):
-            print("Hpc" + str(HpcIndex + 1))
-            for list in self.Hpc[HpcIndex]:
-                for x in list:
-                    print(x, end=" ")
-                print()
-            print()"""
+        for i in range(npc ** 2):
+            x = 1 / self.detJ[i]
+            for j in range(4):
+                self.dNdx[i].append(
+                    (x * self.inverted_jakob[i][1][1] * ksi_data[i][j]) + (x * (-self.inverted_jakob[i][0][1])) * eta_data[i][j])
+                print(x, x * self.inverted_jakob[i][1][1], ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]), eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]) * eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j] + (x * (-self.inverted_jakob[i][0][1])) * eta_data[i][j])
+                print(x * self.inverted_jakob[i][0][0], x * self.inverted_jakob[i][0][1], x * self.inverted_jakob[i][1][0], x * self.inverted_jakob[i][1][1])
+                self.dNdy[i].append(
+                    (x * (-self.inverted_jakob[i][1][0]) * ksi_data[i][j]) + (x * self.inverted_jakob[i][0][0] * eta_data[i][j]))
+                # self.dNdx[i].append(
+                #     self.inverted_jakob[i][1][1] * ksi_data[i][j] + self.inverted_jakob[i][1][0] * eta_data[i][j])
+                #
+                # self.dNdy[i].append(
+                #     self.inverted_jakob[i][0][1] * ksi_data[i][j] + self.inverted_jakob[i][0][0] * eta_data[i][j])
 
-        # self.draw()
+        for i in range(npc ** 2):
+            dN_po_dx = np.array(self.dNdx[i])
+            dN_po_dx_transponowane = np.reshape(dN_po_dx, (4, 1))
+            temp1 = dN_po_dx * dN_po_dx_transponowane
 
-    def draw(self):
+
+            dN_po_dy = np.array(self.dNdy[i])
+            dN_po_dy_transponowane = np.reshape(dN_po_dy, (4, 1))
+            temp2 = dN_po_dy * dN_po_dy_transponowane
+
+            self.H += (temp1 + temp2) * self.k * self.detJ[i] * wPC[i]
+            # print(f"H LOCAL {i}\n {(temp1 + temp2) * self.k * self.detJ[i] * wPC[i]}")
         print("dNdX: ")
         for list in self.dNdx:
             for x in list:
@@ -92,12 +85,18 @@ class MatrixH():
                 print(x, end=" ")
             print()
 
-        for HpcIndex in range(len(self.Hpc)):
-            print("Hpc" + str(HpcIndex + 1))
-            for list in self.Hpc[HpcIndex]:
-                for x in list:
-                    print(x, end=" ")
-                print()
+
+    def draw(self):
+        print("dNdX: ")
+        for list in self.dNdx:
+            for x in list:
+                print(x, end=" ")
+            print()
+
+        print("dNdY: ")
+        for list in self.dNdy:
+            for x in list:
+                print(x, end=" ")
             print()
 
         print("H: ")
