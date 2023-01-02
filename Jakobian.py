@@ -18,10 +18,12 @@ class Jakobian():
 
     def calculate(self, npc):
 
-        jakob = [[0, 0], [0, 0]]
-        inv_jakob = [[0, 0], [0, 0]]
+
         detJ = 0
         for j in range(npc ** 2):
+            jakob = [[0, 0], [0, 0]]
+            inv_jakob = [[0, 0], [0, 0]]
+            detJ = 0
             # dx po dksi
             jakob[0][0] = self.ksi_data[j][0] * self.x[0] + self.ksi_data[j][1] * self.x[1] + self.ksi_data[j][2] * \
                           self.x[2] + self.ksi_data[j][3] * self.x[3]
@@ -37,9 +39,7 @@ class Jakobian():
 
             detJ = jakob[0][0] * jakob[1][1] - (jakob[1][0] * jakob[0][1])
             self.jakobs.append(detJ)
-            print("jakob")
-            for x in jakob:
-                print(x)
+
 
             # # dy po deta
             # inv_jakob[0][0] = 1 / detJ * jakob[1][1]

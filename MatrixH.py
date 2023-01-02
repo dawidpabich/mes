@@ -40,8 +40,7 @@ class MatrixH:
 
         ksi_data = self.ele4_data[0]
         eta_data = self.ele4_data[1]
-        print(self.detJ)
-        print(len(wPC), wPC)
+
         for i in range(npc ** 2):
             self.dNdx.append([])
             self.dNdy.append([])
@@ -51,8 +50,8 @@ class MatrixH:
             for j in range(4):
                 self.dNdx[i].append(
                     (x * self.inverted_jakob[i][1][1] * ksi_data[i][j]) + (x * (-self.inverted_jakob[i][0][1])) * eta_data[i][j])
-                print(x, x * self.inverted_jakob[i][1][1], ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]), eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]) * eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j] + (x * (-self.inverted_jakob[i][0][1])) * eta_data[i][j])
-                print(x * self.inverted_jakob[i][0][0], x * self.inverted_jakob[i][0][1], x * self.inverted_jakob[i][1][0], x * self.inverted_jakob[i][1][1])
+               # print(x, x * self.inverted_jakob[i][1][1], ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]), eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j], x * (-self.inverted_jakob[i][0][1]) * eta_data[i][j], x * self.inverted_jakob[i][1][1] * ksi_data[i][j] + (x * (-self.inverted_jakob[i][0][1])) * eta_data[i][j])
+              #  print(x * self.inverted_jakob[i][0][0], x * self.inverted_jakob[i][0][1], x * self.inverted_jakob[i][1][0], x * self.inverted_jakob[i][1][1])
                 self.dNdy[i].append(
                     (x * (-self.inverted_jakob[i][1][0]) * ksi_data[i][j]) + (x * self.inverted_jakob[i][0][0] * eta_data[i][j]))
                 # self.dNdx[i].append(
@@ -73,17 +72,7 @@ class MatrixH:
 
             self.H += (temp1 + temp2) * self.k * self.detJ[i] * wPC[i]
             # print(f"H LOCAL {i}\n {(temp1 + temp2) * self.k * self.detJ[i] * wPC[i]}")
-        print("dNdX: ")
-        for list in self.dNdx:
-            for x in list:
-                print(x, end=" ")
-            print()
 
-        print("dNdY: ")
-        for list in self.dNdy:
-            for x in list:
-                print(x, end=" ")
-            print()
 
 
     def draw(self):

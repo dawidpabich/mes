@@ -16,7 +16,7 @@ def main():
     grid = Grid("Test2_4_4_MixGrid.txt")
     global_data = GlobalData(grid.data.global_data_values)
 
-    npc = 3
+    npc = 4
     element4 = Element4(npc)
     # element4.calculate()
     element4_data = element4.calculate()
@@ -32,16 +32,16 @@ def main():
         element.H = matrixH.H
         print(f"element.HLocal:\n {element.H}")
 
-        # matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, global_data.Alfa)
-        # element.Hbc = matrixHBC.HBC
+        matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, global_data.Alfa)
+        element.Hbc = matrixHBC.HBC
         # print(f"element.HBC:\n {element.Hbc}")
         #
         # matrixP = VectorP(element, grid.nodes, element4HBC, 300, 1200, 2)
         # element.P = matrixP.P
         # print(f"element.P:\n {element.P}")
         #
-        # element.H += element.Hbc
-        # #print(element.H)
+        element.H += element.Hbc
+        print(f"element.H + HBC:\n {element.H}")
         #
         # matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
         # element.C = matrixC.C
