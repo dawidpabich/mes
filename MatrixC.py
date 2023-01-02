@@ -34,7 +34,8 @@ class MatrixC:
             for i in range(self.npc):
                 for j in range(self.npc):
                     wPC.append(w[0][i] * w[1][j])
-                    
+
+
         for i in range(self.npc ** 2):
             N = np.array(self.element4.N[i])
             N_Transponowane = np.reshape(N, (4, 1))
@@ -42,4 +43,5 @@ class MatrixC:
             N_Razy_N_Transponowane = N * N_Transponowane
             N_Razy_N_Transponowane *= self.detJ[i] * self.ro * self.cp
             self.C += N_Razy_N_Transponowane * wPC[i]
+
 

@@ -25,7 +25,6 @@ class MatrixHBC:
                 x2 = ((self.nodes[self.nodesID[i + 1] - 1]).x)
                 y1 = ((self.nodes[self.nodesID[i] - 1]).y)
                 y2 = ((self.nodes[self.nodesID[i + 1] - 1]).y)
-
                 detJ = sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2
 
                 if i == -1:  # prawa sciana

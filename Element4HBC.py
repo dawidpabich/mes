@@ -31,10 +31,7 @@ class Element4HBC():
         if self.npc == 2:
             wagi = [1, 1]
             arg = 1 / sqrt(3)
-            # PC1 = [ (arg, -1), (-arg, -1)] # dolna
-            # PC2 = [(1, arg), (1, -arg)] # prawa
-            # PC3 = [(arg, 1), (-arg, 1)] # gorna
-            # PC4 = [(-1, arg), (-1, -arg)] # lewa
+
             PC1 = [(-arg, -1), (arg, -1)]  # dolna
             PC2 = [(1, -arg), (1, arg)]  #
             PC3 = [(arg, 1), (-arg, 1)]
@@ -62,18 +59,12 @@ class Element4HBC():
 
         # liczenie funkcji kształtu dla punktów całkowania
         for j in range(self.npc):
+
             """
-            N1 = 0.25 * (1 - ksi) * (1 - eta)
-            N2 = 0.25 * (1 + ksi) * (1 - eta)
-            N3 = 0.25 * (1 + ksi) * (1 + eta)
-            N4 = 0.25 * (1 - ksi) * (1 + eta)
-            """
-            """
-            ???
-                        N1 = 0.25 * (1 + ksi) * (1 + eta)
-                        N2 = 0.25 * (1 - ksi) * (1 + eta)
-                        N3 = 0.25 * (1 - ksi) * (1 - eta)
-                        N4 = 0.25 * (1 + ksi) * (1 - eta)
+            N1 = 0.25 * (1 + ksi) * (1 + eta)
+            N2 = 0.25 * (1 - ksi) * (1 + eta)
+            N3 = 0.25 * (1 - ksi) * (1 - eta)
+            N4 = 0.25 * (1 + ksi) * (1 - eta)
             """
 
             # dolna - PC1
@@ -85,8 +76,8 @@ class Element4HBC():
             N4 = 0.25 * (1 + ksi) * (1 - eta)
             self.dolna_sciana[j].append(N1)
             self.dolna_sciana[j].append(N2)
-            self.dolna_sciana[j].append(N3 * wagi[j])
-            self.dolna_sciana[j].append(N4 * wagi[j])
+            self.dolna_sciana[j].append(N3)
+            self.dolna_sciana[j].append(N4)
 
             # prawa - PC2
             ksi = PC2[j][0]
@@ -95,10 +86,10 @@ class Element4HBC():
             N2 = 0
             N3 = 0
             N4 = 0.25 * (1 + ksi) * (1 - eta)
-            self.prawa_sciana[j].append(N1 * wagi[j])
+            self.prawa_sciana[j].append(N1)
             self.prawa_sciana[j].append(N2)
             self.prawa_sciana[j].append(N3)
-            self.prawa_sciana[j].append(N4 * wagi[j])
+            self.prawa_sciana[j].append(N4)
 
             # gorna - PC3
             ksi = PC3[j][0]
@@ -107,8 +98,8 @@ class Element4HBC():
             N2 = 0.25 * (1 - ksi) * (1 + eta)
             N3 = 0
             N4 = 0
-            self.gorna_sciana[j].append(N1 * wagi[j])
-            self.gorna_sciana[j].append(N2 * wagi[j])
+            self.gorna_sciana[j].append(N1)
+            self.gorna_sciana[j].append(N2)
             self.gorna_sciana[j].append(N3)
             self.gorna_sciana[j].append(N4)
 
@@ -121,8 +112,8 @@ class Element4HBC():
             N4 = 0
 
             self.lewa_sciana[j].append(N1)
-            self.lewa_sciana[j].append(N2 * wagi[j])
-            self.lewa_sciana[j].append(N3 * wagi[j])
+            self.lewa_sciana[j].append(N2)
+            self.lewa_sciana[j].append(N3)
             self.lewa_sciana[j].append(N4)
             # print(N1, N2)
 
@@ -151,8 +142,6 @@ class Element4HBC():
             temp_N_razy_NTransponowane = np.multiply(temp_lewa_sciana, temp_lewa_scianaT)
             temp_N_razy_NTransponowane *= wagi[i]
             self.lewa_sciana_N_Razy_NTransponowane += temp_N_razy_NTransponowane
-
-
 
     def draw(self):
         print("Dolna sciana")

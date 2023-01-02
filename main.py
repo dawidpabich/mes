@@ -30,42 +30,43 @@ def main():
 
         matrixH = MatrixH(jakob.inv_jakob, element4_data, global_data.Conductivity, jakob.jakobs, npc)
         element.H = matrixH.H
-        print(f"element.HLocal:\n {element.H}")
+       # print(f"element.HLocal:\n {element.H}")
+
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, global_data.Alfa)
         element.Hbc = matrixHBC.HBC
+        print(f"element.HBC:\n {element.Hbc}")
         element.H += element.Hbc
         print(f"element.H + HBC:\n {element.H}")
 
         matrixP = VectorP(element, grid.nodes, element4HBC, global_data.Alfa, global_data.Tot, npc)
         element.P = matrixP.P
-        print(f"element.P:\n {element.P}")
+       # print(f"element.P:\n {element.P}")
 
+        matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
+        element.C = matrixC.C
 
-        #
-        # matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
-        # element.C = matrixC.C
-        # element.H += element.C
-        # print(element.H/50)
-        # print(f"element.C:\n {element.C}")
-    #
-    # H_aggregated = agregateH(grid)
+      #  print( element.H+ (element.C/50))
+      #  print(f"element.C:\n {element.C}")
+
+    H_aggregated = agregateH(grid)
     P_aggregated = agregateP(grid)
-    # C_aggregated = agregateC(grid)
+    C_aggregated = agregateC(grid)
+    #H_aggregated += C_aggregated/50
 
-    # print("H_Final aggregated:")
-    # for x in H_aggregated:
-    #    print(x)
+    print("H_Final aggregated:")
+    for x in H_aggregated:
+       print(x)
     print("P aggregated:")
     for x in P_aggregated:
         print(x)
-    # print("C aggregated")
-    # for x in C_aggregated:
-    #     print(x, end='\n')
+    print("C aggregated")
+    for x in C_aggregated:
+        print(x, end='\n')
 
-    # print()
-    # simulation(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,
-    #            global_data.SimulationTime, global_data.SimulationStepTime)
+    print()
+    simulation(len(grid.nodes), H_aggregated, P_aggregated, C_aggregated, global_data.InitialTemp,
+               global_data.SimulationTime, global_data.SimulationStepTime)
 
 
 main()

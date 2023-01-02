@@ -17,6 +17,15 @@ class VectorP:
 
     def calculate(self):
 
+        if self.npc == 2:
+            wagi = [1, 1]
+
+        if self.npc == 3:
+            wagi = [5 / 9, 8 / 9, 5 / 9]
+
+        if self.npc == 4:
+            wagi = [0.347855, 0.652145, 0.652145, 0.347855]
+
         detJ = 0
         HPCsc1 = np.zeros((4, 1))
         HPCsc2 = np.zeros((4, 1))
@@ -30,20 +39,14 @@ class VectorP:
                 x2 = self.nodes[self.nodesID[i + 1] - 1].x
                 y1 = self.nodes[self.nodesID[i] - 1].y
                 y2 = self.nodes[self.nodesID[i + 1] - 1].y
-
-                # if(x1 - x2 != 0):
-                #     detJ = (x1 - x2) / 2
-                # else:
-                #     detJ = (y1 - y2) / 2
-
                 detJ = sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) / 2
-                # detJ = 0.0125
+
                 if i == -1:  # prawa sciana
                     for j in range(self.npc):
                         N = self.element4MatrixHBC.prawa_sciana[j]
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
-                        N *= self.tot
+                        N *= self.tot * wagi[j]
                         HPCsc1 += N
 
                 if i == 0:  # gorna sciana
@@ -51,7 +54,7 @@ class VectorP:
                         N = self.element4MatrixHBC.gorna_sciana[j]
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
-                        N *= self.tot
+                        N *= self.tot * wagi[j]
                         HPCsc2 += N
 
                 if i == 1:  # lewa sciana
@@ -59,7 +62,7 @@ class VectorP:
                         N = self.element4MatrixHBC.lewa_sciana[j]
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
-                        N *= self.tot
+                        N *= self.tot * wagi[j]
                         HPCsc3 += N
 
                 if i == 2:  # dolna sciana
@@ -67,8 +70,9 @@ class VectorP:
                         N = self.element4MatrixHBC.dolna_sciana[j]
 
                         N = np.reshape(N, (4, 1))  # zmiana z wiersza w kolumne
-                        N *= self.tot
+                        N *= self.tot * wagi[j]
                         HPCsc4 += N
+
         self.P += HPCsc1 + HPCsc2 + HPCsc3 + HPCsc4
         self.P *= self.alfa * detJ  # det J gdzies indziej???
 
