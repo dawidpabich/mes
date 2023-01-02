@@ -52,7 +52,6 @@ class Element4():
         self.data.append(self.grid_ksi)
         self.data.append(self.grid_eta)
 
-        self.draw()
         return (self.data)
 
 

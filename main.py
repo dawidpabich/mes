@@ -34,14 +34,14 @@ def main():
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, global_data.Alfa)
         element.Hbc = matrixHBC.HBC
-        # print(f"element.HBC:\n {element.Hbc}")
-        #
-        # matrixP = VectorP(element, grid.nodes, element4HBC, 300, 1200, 2)
-        # element.P = matrixP.P
-        # print(f"element.P:\n {element.P}")
-        #
         element.H += element.Hbc
         print(f"element.H + HBC:\n {element.H}")
+
+        matrixP = VectorP(element, grid.nodes, element4HBC, global_data.Alfa, global_data.Tot, npc)
+        element.P = matrixP.P
+        print(f"element.P:\n {element.P}")
+
+
         #
         # matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
         # element.C = matrixC.C
@@ -50,15 +50,15 @@ def main():
         # print(f"element.C:\n {element.C}")
     #
     # H_aggregated = agregateH(grid)
-    # P_aggregated = agregateP(grid)
+    P_aggregated = agregateP(grid)
     # C_aggregated = agregateC(grid)
 
     # print("H_Final aggregated:")
     # for x in H_aggregated:
     #    print(x)
-    # print("P aggregated:")
-    # for x in P_aggregated:
-    #     print(x)
+    print("P aggregated:")
+    for x in P_aggregated:
+        print(x)
     # print("C aggregated")
     # for x in C_aggregated:
     #     print(x, end='\n')
