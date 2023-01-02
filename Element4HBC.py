@@ -81,34 +81,34 @@ class Element4HBC():
             eta = PC1[j][1]
             N1 = 0
             N2 = 0
-            N3 = 0.25 * (1 - ksi) * (1 - eta) * wagi[j]
-            N4 = 0.25 * (1 + ksi) * (1 - eta) * wagi[j]
+            N3 = 0.25 * (1 - ksi) * (1 - eta)
+            N4 = 0.25 * (1 + ksi) * (1 - eta)
             self.dolna_sciana[j].append(N1)
             self.dolna_sciana[j].append(N2)
-            self.dolna_sciana[j].append(N3)
-            self.dolna_sciana[j].append(N4)
+            self.dolna_sciana[j].append(N3 * wagi[j])
+            self.dolna_sciana[j].append(N4 * wagi[j])
 
             # prawa - PC2
             ksi = PC2[j][0]
             eta = PC2[j][1]
-            N1 = 0.25 * (1 + ksi) * (1 + eta) * wagi[j]
+            N1 = 0.25 * (1 + ksi) * (1 + eta)
             N2 = 0
             N3 = 0
-            N4 = 0.25 * (1 + ksi) * (1 - eta) * wagi[j]
-            self.prawa_sciana[j].append(N1)
+            N4 = 0.25 * (1 + ksi) * (1 - eta)
+            self.prawa_sciana[j].append(N1 * wagi[j])
             self.prawa_sciana[j].append(N2)
             self.prawa_sciana[j].append(N3)
-            self.prawa_sciana[j].append(N4)
+            self.prawa_sciana[j].append(N4 * wagi[j])
 
             # gorna - PC3
             ksi = PC3[j][0]
             eta = PC3[j][1]
-            N1 = 0.25 * (1 + ksi) * (1 + eta) * wagi[j]
-            N2 = 0.25 * (1 - ksi) * (1 + eta) * wagi[j]
+            N1 = 0.25 * (1 + ksi) * (1 + eta)
+            N2 = 0.25 * (1 - ksi) * (1 + eta)
             N3 = 0
             N4 = 0
-            self.gorna_sciana[j].append(N1)
-            self.gorna_sciana[j].append(N2)
+            self.gorna_sciana[j].append(N1 * wagi[j])
+            self.gorna_sciana[j].append(N2 * wagi[j])
             self.gorna_sciana[j].append(N3)
             self.gorna_sciana[j].append(N4)
 
@@ -116,13 +116,13 @@ class Element4HBC():
             ksi = PC4[j][0]
             eta = PC4[j][1]
             N1 = 0
-            N2 = 0.25 * (1 - ksi) * (1 + eta) * wagi[j]
-            N3 = 0.25 * (1 - ksi) * (1 - eta) * wagi[j]
+            N2 = 0.25 * (1 - ksi) * (1 + eta)
+            N3 = 0.25 * (1 - ksi) * (1 - eta)
             N4 = 0
 
             self.lewa_sciana[j].append(N1)
-            self.lewa_sciana[j].append(N2)
-            self.lewa_sciana[j].append(N3)
+            self.lewa_sciana[j].append(N2 * wagi[j])
+            self.lewa_sciana[j].append(N3 * wagi[j])
             self.lewa_sciana[j].append(N4)
             # print(N1, N2)
 

@@ -22,7 +22,6 @@ class MatrixHBC:
             if (self.nodes[self.nodesID[i] - 1]).BC == 1 and (self.nodes[self.nodesID[i + 1] - 1]).BC == 1:
 
                 x1 = ((self.nodes[self.nodesID[i] - 1]).x)
-                a = (self.nodes[self.nodesID[i] - 1])
                 x2 = ((self.nodes[self.nodesID[i + 1] - 1]).x)
                 y1 = ((self.nodes[self.nodesID[i] - 1]).y)
                 y2 = ((self.nodes[self.nodesID[i + 1] - 1]).y)
@@ -41,7 +40,8 @@ class MatrixHBC:
                 if i == 2:  # dolna sciana
                     HBCpc += self.element4MatrixHBC.dolna_sciana_N_Razy_NTransponowane
 
-        self.HBC += HBCpc * detJ * self.alfa  # czy tutaj detJ???
+        self.HBC += HBCpc * detJ * self.alfa
+
         # print(self.HBC)
         # print()
 
