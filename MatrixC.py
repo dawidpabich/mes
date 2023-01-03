@@ -39,7 +39,6 @@ class MatrixC:
         for i in range(self.npc ** 2):
             N = np.array(self.element4.N[i])
             N_Transponowane = np.reshape(N, (4, 1))
-
             N_Razy_N_Transponowane = N * N_Transponowane
             N_Razy_N_Transponowane *= self.detJ[i] * self.ro * self.cp
             self.C += N_Razy_N_Transponowane * wPC[i]

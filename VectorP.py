@@ -49,6 +49,7 @@ class VectorP:
                         N *= self.tot * wagi[j]
                         HPCsc1 += N
 
+
                 if i == 0:  # gorna sciana
                     for j in range(self.npc):
                         N = self.element4MatrixHBC.gorna_sciana[j]
@@ -74,18 +75,9 @@ class VectorP:
                         HPCsc4 += N
 
         self.P += HPCsc1 + HPCsc2 + HPCsc3 + HPCsc4
-        self.P *= self.alfa * detJ  # det J gdzies indziej???
+        self.P *= self.alfa * detJ
 
     def draw(self):
         for x in self.HBC:
             print(x)
-        """for i in range(len(self.HBC)):
-            print("HBC_local" + str(i + 1))
-            for list in self.HBC[i]:
-                for x in list:
-                    print(x, end=" ")
-                print()
-            print()"""
 
-        # print(self.elementHBpc[1])
-    # print(np.array(self.elementHBpc[1]) * 25)

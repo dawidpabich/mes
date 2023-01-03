@@ -17,31 +17,30 @@ class Element4():
 
         if self.integration_points == 2:
             arg = 1 / sqrt(3)
-            ksi_args = [-arg, -arg, arg, arg]
-            eta_args = [-arg, arg, arg, -arg]
+            ksi_args = [-arg, arg, arg, -arg]
+            eta_args = [-arg, -arg, arg, arg]
         elif self.integration_points == 3:
             arg = sqrt(3 / 5)
-            ksi_args = [-arg, -arg, -arg, 0, 0, 0, arg, arg, arg]
-            eta_args = [-arg, 0, arg, -arg, 0, arg, -arg, 0, arg]
-
+            ksi_args = [-arg, 0, arg, -arg, 0, arg, -arg, 0, arg]
+            eta_args = [-arg, -arg, -arg, 0, 0, 0, arg, arg, arg]
         elif self.integration_points == 4:
             arg = 0.861136
             arg2 = 0.339981
-            ksi_args = [-arg, -arg, -arg, -arg, -arg2, -arg2, -arg2, -arg2,
-                        arg2, arg2, arg2, arg2, arg, arg, arg, arg]
-            eta_args = [-arg, -arg2, arg2, arg, -arg, -arg2, arg2, arg,
+            ksi_args = [-arg, -arg2, arg2, arg, -arg, -arg2, arg2, arg,
                         -arg, -arg2, arg2, arg, -arg, -arg2, arg2, arg]
-
+            eta_args = [-arg, -arg, -arg, -arg, -arg2, -arg2, -arg2, -arg2,
+                        arg2, arg2, arg2, arg2, arg, arg, arg, arg]
         for i in range(self.ele4_rows):
-            self.grid_ksi[i][0] = -0.25 * (1 - ksi_args[i])
-            self.grid_ksi[i][1] = 0.25 * (1 - ksi_args[i])
-            self.grid_ksi[i][2] = 0.25 * (1 + ksi_args[i])
-            self.grid_ksi[i][3] = -0.25 * (1 + ksi_args[i])
-
-            self.grid_eta[i][0] = -0.25 * (1 - eta_args[i])
-            self.grid_eta[i][1] = -0.25 * (1 + eta_args[i])
-            self.grid_eta[i][2] = 0.25 * (1 + eta_args[i])
-            self.grid_eta[i][3] = 0.25 * (1 - eta_args[i])
+            # pochodne po ksi
+            self.grid_ksi[i][0] = -0.25 * (1 - eta_args[i])
+            self.grid_ksi[i][1] = 0.25 * (1 - eta_args[i])
+            self.grid_ksi[i][2] = 0.25 * (1 + eta_args[i])
+            self.grid_ksi[i][3] = -0.25 * (1 + eta_args[i])
+            # pochodne po eta
+            self.grid_eta[i][0] = -0.25 * (1 - ksi_args[i])
+            self.grid_eta[i][1] = -0.25 * (1 + ksi_args[i])
+            self.grid_eta[i][2] = 0.25 * (1 + ksi_args[i])
+            self.grid_eta[i][3] = 0.25 * (1 - ksi_args[i])
 
         for i in range(self.ele4_rows):
             self.N[i][0] = 0.25 * (1 - ksi_args[i]) * (1 - eta_args[i])
