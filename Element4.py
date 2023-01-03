@@ -1,7 +1,5 @@
 from math import sqrt
 
-import numpy as np
-
 
 class Element4():
     def __init__(self, integration_points):

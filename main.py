@@ -15,10 +15,10 @@ def main():
     np.set_printoptions(linewidth=300)
     grid = Grid("Test2_4_4_MixGrid.txt")
     global_data = GlobalData(grid.data.global_data_values)
+    grid.show()
 
-    npc = 2
+    npc = 4
     element4 = Element4(npc)
-    # element4.calculate()
     element4_data = element4.calculate()
 
     element4HBC = Element4HBC(npc, global_data.Alfa)
@@ -28,22 +28,21 @@ def main():
         print(f"ELEMENT {it}")
         jakob = Jakobian(element4_data, element.nodes_ID, grid.nodes, npc)
 
-        matrixH = MatrixH(jakob.inv_jakob, element4_data, global_data.Conductivity, jakob.jakobs, npc)
+        matrixH = MatrixH(jakob.jakob, element4_data, global_data.Conductivity, jakob.detJ, npc)
         element.H = matrixH.H
-       # print(f"element.HLocal:\n {element.H}")
+        print(f"element.HLocal:\n {element.H}")
 
 
         matrixHBC = MatrixHBC(element, grid.nodes, element4HBC, global_data.Alfa)
         element.Hbc = matrixHBC.HBC
-      #  print(f"element.HBC:\n {element.Hbc}")
         element.H += element.Hbc
-       # print(f"element.H + HBC:\n {element.H}")
+        print(f"element.H + HBC:\n {element.H}")
 
         matrixP = VectorP(element, grid.nodes, element4HBC, global_data.Alfa, global_data.Tot, npc)
         element.P = matrixP.P
-       # print(f"element.P:\n {element.P}")
+        print(f"element.P:\n {element.P}")
 
-        matrixC = MatrixC(element4, jakob.jakobs, global_data.Density, global_data.SpecificHeat, npc)
+        matrixC = MatrixC(element4, jakob.detJ, global_data.Density, global_data.SpecificHeat, npc)
         element.C = matrixC.C
         # element.H += element.C / 50
         # print(f"element.H + HBC + C:\n {element.H}")
@@ -57,13 +56,14 @@ def main():
     C_aggregated = agregateC(grid)
     #H_aggregated += C_aggregated/50
 
-    print("H_Final aggregated:")
+    print("\nH_Final aggregated:")
     for x in H_aggregated:
        print(x)
-    print("P aggregated:")
+
+    print("\nP aggregated:")
     for x in P_aggregated:
         print(x)
-    print("C aggregated")
+    print("\nC aggregated")
     for x in C_aggregated:
         print(x, end='\n')
 
@@ -73,8 +73,3 @@ def main():
 
 
 main()
-
-# grid = Grid()
-# element4HBC = Element4HBC(2, 300)
-# element4HBC.calculate()
-# matrixP = VectorP(grid.elements[0], grid.nodes, element4HBC, 25, 1200, 2)

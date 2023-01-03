@@ -5,8 +5,8 @@ class Jakobian():
         self.eta_data = ele4_data[1]
         self.nodes_ID = nodes_ID
         self.nodes = nodes
-        self.jakobs = []
-        self.inv_jakob = []
+        self.detJ = []
+        self.jakob = []
         self.x = []
         self.y = []
 
@@ -37,30 +37,12 @@ class Jakobian():
                           self.y[2] + self.eta_data[j][3] * self.y[3]
 
             detJ = jakob[0][0] * jakob[1][1] - (jakob[1][0] * jakob[0][1])
-            self.jakobs.append(detJ)
-
-
-            # # dy po deta
-            # inv_jakob[0][0] = 1 / detJ * jakob[1][1]
-            # # -dy po dksi
-            # inv_jakob[0][1] = -1 / detJ * jakob[0][1]
-            # # -dx po deta
-            # inv_jakob[1][0] = -1 / detJ * jakob[1][0]
-            # # dx po dksi
-            # inv_jakob[1][1] = 1 / detJ * jakob[0][0]
-            # dy po deta
-            inv_jakob[0][0] = jakob[0][0]
-            # -dy po dksi
-            inv_jakob[0][1] = jakob[0][1]
-            # -dx po deta
-            inv_jakob[1][0] = jakob[1][0]
-            # dx po dksi
-            inv_jakob[1][1] = jakob[1][1]
-            self.inv_jakob.append(inv_jakob)
+            self.detJ.append(detJ)
+            self.jakob.append(jakob)
 
     def draw(self):
         print("Jakobian: ")
-        for list in self.jakobs:
+        for list in self.detJ:
             for x in list:
                 print(x, end=" ")
             print()
